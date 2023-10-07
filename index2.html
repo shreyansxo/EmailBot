@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width ,initial-scale=1.0 ">
+    <title>Email Bot</title>
+    <link rel="stylesheet" href="style2.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/cd110130a0.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+
+    <div class="container">
+      <form class="search-bar">
+        <input type="text" id = "prompt" placeholder="Write an email to Niranjan regarding Mini Project" name="q">
+        <button onclick="generateResponse(document.getElementById('prompt').value)" type="button"><img src="search.png"></button>
+      </form>
+
+    </div>
+    <div class="small-container">
+      <form class="txtarea">
+        <textarea id="result" name="result" placeholder="Here is the result..." rows="7" cols="100" ></textarea>
+      </form>
+
+    </div>
+
+    <script>
+      function generateResponse(prompt) {
+        const apiKey = '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';
+
+        fetch('https://api.openai.com/v1/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey,
+          },
+          body: JSON.stringify({
+            "model": "text-davinci-003",
+            "prompt": prompt,
+            'temperature': 0,
+            'max_tokens': 2000,
+            'top_p': 1,
+            'frequency_penalty': 0.0,
+            'presence_penalty': 0.0,
+          }),
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Display the response
+            const responseText = data.choices[0].text;
+            document.getElementById('result').innerHTML = responseText;
+            // document.getElementById('status').innerHTML = 'Request successful';
+          })
+          .catch(error => {
+            // Display the error message
+            // document.getElementById('status').innerHTML = 'Request unsuccessful';
+            document.getElementById('result').innerHTML = error.message;
+          });
+      }
+    </script>
+
+  </body>
+</html>
